@@ -2,7 +2,6 @@
 made by Matthew Tujague:
 
 A local host display to show important newsflashes and graphics for MHSN
-![alt text](https://github.com/Flaccite/MHSN-Project/blob/master/INFO/README-IMG/ExampleScreen.png?raw=true)
 
 Requirements: 
 ```
