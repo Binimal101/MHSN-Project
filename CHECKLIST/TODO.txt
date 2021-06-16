@@ -1,0 +1,9 @@
+URGENT:
+- Add flask-socketIO implementation to communicate between client and server bi-hourly to update server handled info
+	-https://flask-socketio.readthedocs.io/en/latest/intro.html
+- Add ratelimit functionality so no idiot can spam the server for shits and giggles, we don't like those people
+	-https://flask-limiter.readthedocs.io/en/stable/
+
+OTHER:
+- Fix spacing on elements, both in the panels and how the panels are arranged
+- Fix the stupid issue where it just makes the block dissapear after or before school hours even though there is a function to check for that
