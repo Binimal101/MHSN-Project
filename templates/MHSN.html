@@ -1,0 +1,191 @@
+<!doctype HTML>
+<html lang='en' id='MAINFRAME'>
+    <head>
+		<meta charset="utf-8">
+    	<meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
+		<!--Bootstrap CSS-->
+		<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous">
+		<!--Title-->
+		<title id='titleBar'>MHSN_DAY_DATA</title>
+		
+    </head>
+	<body>
+		<div class="container px-4 py-5" id="custom-cards">
+			<h2 class="pb-1 border-bottom"><center>High School North<br>Dashboard</center></h2>
+
+			<div class="col">
+				<div class="card card-cover h-100 overflow-hidden text-white rounded-5 shadow-lg" style='background-image: url({{url_for("static", filename="images/Pattern.png")}});'>
+				<div class="d-flex flex-column h-100 p-5 pb-3 text-white text-shadow-1">
+					
+					<!--This is where the top boxes elements are-->
+					<h2 id='date'>
+						Today is 
+						<script>now = new Date();var days = new Array('Sunday','Monday','Tuesday','Wednesday', 'Thursday','Friday','Saturday');var months = new Array('January','February','March','April', 'May','June','July','August','September', 'October','November','December');var date = ((now.getDate()<10) ? "0" : "")+ now.getDate();function y2k(number){return (number < 1000) ? number + 1900 : number;}today = days[now.getDay()] + ", " + " " + months[now.getMonth()] + " " + date + ", " + (y2k(now.getYear())) ;document.write("" + today);</script>
+						and an {{today_is}}-Day
+					</h2>
+					<h2 id='block'></h2>
+					<h2 id='time'></h2>
+					<!--This is the divider for top box-->
+					<h2 class="pb-1 border-bottom"></h2>
+					
+					<!--Bottom, under divider will have logo and quote-->
+					<ul class="d-flex list-unstyled mt-auto">
+						<li class="me-auto">
+							<img src={{url_for('static', filename='images/mhsn_logo.jpg')}} alt="Bootstrap" width="32" height="32" class="rounded-circle border border-white">
+						</li>
+
+						<li class="d-flex align-items-center me-3">
+							<svg class="bi me-2" width="1em" height="1em"><use xlink:href="#geo-fill"/></svg>
+							<small>{{quote}}</small>
+						</li>
+					</ul>
+				<!--</div>-->
+				</div>
+			</div>
+
+			<div class="row row-cols-1 row-cols-lg-2 align-items-stretch g-4 py-5">
+			<div class="col">
+				<div class="card card-cover h-100 overflow-hidden text-white bg-dark rounded-5 shadow-lg" style="background-image: url({{weather_image}});">
+				<div class="d-flex flex-column h-100 p-5 pb-3 text-white text-shadow-1">
+
+					<h2 class="pt-5 mt-5 mb-4 display-6 lh-1 fw-bold">{{conditions}} <h4>Currently: {{current}}</h4></h2>
+					
+					<ul class="d-flex list-unstyled mt-auto">
+					<li class="me-auto">
+						<img src={{url_for('static', filename='images/mhsn_logo.jpg')}} alt="Bootstrap" width="32" height="32" class="rounded-circle border border-white">
+					</li>
+					<li class="d-flex align-items-center me-3">
+						<svg class="bi me-2" width="1em" height="1em"><use xlink:href="#geo-fill"/></svg>
+						<small>High/Low:</small>
+					</li>
+					<li class="d-flex align-items-center">
+						<svg class="bi me-2" width="1em" height="1em"><use xlink:href="#calendar3"/></svg>
+						<small>{{high_low}}</small>
+					</li>
+					</ul>
+				</div>
+				</div>
+			</div>
+
+			<div class="col">
+				<div class="card card-cover h-100 overflow-hidden text-white bg-dark rounded-5 shadow-lg" style="background-image: url('unsplash-photo-3.jpg');">
+				<div class="d-flex flex-column h-100 p-5 pb-3 text-shadow-1">
+					<h2 class="pt-3 mt-5 mb-4 display-6 lh-1 fw-bold"><center>Want an ad on the dashboard?</center>
+						<h2 class="pb-1 border-bottom"></h2>
+						<center><h4>Reach out to Tujaguem@middletownk12.org for info on how to add an advert</h4></center>
+					</h2>
+
+					<ul class="d-flex list-unstyled mt-auto">
+					<li class="me-auto">
+						<img src={{url_for('static', filename='images/mhsn_logo.jpg')}} alt="Bootstrap" width="32" height="32" class="rounded-circle border border-white">
+					</li>
+					<li class="d-flex align-items-center me-3">
+						<svg class="bi me-2" width="1em" height="1em"><use xlink:href="#geo-fill"/></svg>
+						<small>Your name, credits</small>
+					</li>
+					<li class="d-flex align-items-center">
+						<svg class="bi me-2" width="1em" height="1em"><use xlink:href="#calendar3"/></svg>
+						<small>Optional</small>
+					</li>
+					</ul>
+				</div>
+				</div>
+			</div>
+			</div>
+		</div>
+		<!--Bootstrap Javascript Bundle Dependency-->
+		<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-gtEjrD/SeCtmISkJkNUaaKMoLD0//ElJ19smozuHV6z3Iehds+3Ulb9Bn9Plx0x4" crossorigin="anonymous"></script>
+		<!--Element Javascript-->
+		<script>
+			function updootTime() { //Updates static page time by current time
+				var dt = new Date();
+				dt.setMinutes(dt.getMinutes() + 2); //School clock is ~2:15 mins ahead
+				dt.setSeconds(dt.getSeconds() + 15);//School clock is ~2:15 mins ahead
+				//Fixes minute glitch with missing zero
+				if(dt.getMinutes() < 10) {
+					var minutes = '0' + dt.getMinutes().toString()
+				} else {
+					var minutes = dt.getMinutes().toString()
+				}
+				//Fixes second glitch with missing zero
+				if(dt.getSeconds() < 10) {
+					var seconds = '0' + dt.getSeconds().toString()
+				} else {
+					var seconds = dt.getSeconds().toString()
+				}
+
+				var current_time = dt.getHours() + ':' + minutes + ':' + seconds;
+				document.getElementById("time").innerHTML = current_time;
+			}
+
+			function updootBlock() {
+				dt = new Date();
+				dt.setMinutes(dt.getMinutes() + 2); //School clock is ~2:15 mins ahead
+				dt.setSeconds(dt.getSeconds() + 15);
+				hour = dt.getHours();
+				minute = dt.getMinutes();
+				current = new Date('December 1, 2000 ' + hour + ':' + minute);
+				
+				const block_times = {
+					'1' : {
+						'start' : new Date('December 1, 2000 7:25').getTime(),
+						'end' : new Date('December 1, 2000 8:45').getTime(),
+						'name' : 'Block 1{{today_is}}',
+					},
+					
+					'2' : {
+						'start' : new Date('December 1, 2000 8:46').getTime(),
+						'end' : new Date('December 1, 2000 10:10').getTime(),
+						'name' : 'Block 2{{today_is}}',
+					},
+					
+					'3' : {
+						'start' : new Date('December 1, 2000 10:11').getTime(),
+						'end' : new Date('December 1, 2000 10:41').getTime(),
+						'name' : 'Block 3{{today_is}}',
+					},
+
+					
+					'4' : {
+						'start' : new Date('December 1, 2000 10:42').getTime(), // change back to 10:46
+						'end' : new Date('December 1, 2000 11:12').getTime(),
+						'name' : 'Block 4{{today_is}}',
+					},
+					
+					'5' : {
+						'start' : new Date('December 1, 2000 11:13').getTime(),
+						'end' : new Date('December 1, 2000 12:37').getTime(),
+						'name' : 'Block 5{{today_is}}',
+					},
+					
+					'6' : {
+						'start' : new Date('December 1, 2000 12:38').getTime(),
+						'end' : new Date('December 1, 2000 14:02').getTime(),
+						'name' : 'Block 6{{today_is}}',
+					}
+				}
+
+				for(let times in block_times) {
+					times = block_times[times]
+					
+					if(times['start'] < current.getTime() && times['end'] > current.getTime()) {
+						document.getElementById('block').innerHTML = times['name'];
+						break
+					} else if(times['start'] > current.getTime()) {
+						document.getElementById('block').innerHTML = 'School has not started yet!';
+					} else if(times['end'] > current.getTime()) {
+						doctype.getElementById('block').innerHTML = 'School has ended!'
+					}
+
+				}
+
+				}
+
+			setInterval(function() { // Updates the time every second and returns hour minute values for block updates
+				updootBlock();
+				updootTime();
+			}, 1000); //Every 1000 ms is a second
+		</script>
+	</body>
+</html>
