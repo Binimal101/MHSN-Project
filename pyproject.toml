@@ -10,8 +10,6 @@ requests = "^2.25.1"
 lxml = "^4.6.3"
 beautifulsoup4 = "^4.9.3"
 flask = "^2.0.1"
-npm = "^0.1.1"
-Flask-SocketIO = "^5.1.0"
 
 [tool.poetry.dev-dependencies]
 
