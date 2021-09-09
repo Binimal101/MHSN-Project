@@ -13,9 +13,10 @@ if weather_dict['description'] is not None:
 	description = weather_dict['description']
 else:
 	description = None
-temperature = weather_dict['current']
+
+current = weather_dict['current']
 forecast = weather_dict['forecast']
-high_low = weather_dict['hilo']
+high_low = weather_dict['high_low']
 
 @app.route('/')
 def home():
@@ -27,7 +28,7 @@ def home():
 		description = None
 	temperature = weather_dict['current']
 	forecast = weather_dict['forecast']
-	high_low = weather_dict['hilo']
+	high_low = weather_dict['high_low']
 	JSON = requests.get('https://zenquotes.io/api/random').text; quote = str(json.loads(JSON)[0]['q'])
 	
 	if 'cloud' in forecast.lower():
@@ -44,7 +45,7 @@ def home():
 		type_ = 'Unknown.jpg'
 	
 	weather_image = url_for('static', filename=f'images/{type_}')
-	return render_template('MHSN.html', conditions=forecast, current=temperature, high_low=high_low, weather_image=weather_image, quote=quote, today_is=today_is, description=description)
+	return render_template('MHSN.html', forecast=forecast, current=current, high_low=high_low, weather_image=weather_image, quote=quote, today_is=today_is, description=description)
 
 if __name__ == '__main__':
     app.run(host="0.0.0.0", port=8081, debug=True)

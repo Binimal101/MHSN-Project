@@ -1,0 +1,54 @@
+NEW IDEAS:
+
+- GPS system for around the school
+	- augmented reality pathfinding
+		:CON
+			- All too much learning to do.
+	- google maps esque pathfinding
+		:TODO
+			- Check google maps or general GPS accuracy to see validity of plan
+				
+				- Store each and every single classes location to a dictionairy, along with hallway measurements etc
+					- Check to see if the people in engineering classes took the measurements already
+
+OLD IDEAS:
+
+- Make html for display of information ✅
+	- Get a server to host the information as a website
+		- Use dedicated school computers
+			:CON
+				- If power goes out the computer would need to manually be booted again
+			
+			:PRO
+				- Would be nearly free
+
+		- Use a replit pinging system
+			:CON
+				- Would not be up constantly
+				- Display system would not know how or when to reload when repl is down without another system, meaning display would have some money involved
+			
+			:PRO
+				- Would get information on when repl is up
+				- Easy to modify code
+				- Can have a custom domain (paid)
+				- Free
+
+		- Have a third party host the code
+			:CON
+				- Though third parties are quite reliable they aren't perfect, if something happens the display will have to be reset manually
+				- Code will be more difficult to change and test
+				- Not cost efficient in the long running
+
+			:PRO
+				- Computing power is no longer a worry
+				- Most third parties have services that alert you when they go down along with other goodies
+			
+		
+
+	- Use local hosts and raspi's
+		- Have one decent raspi doing calculations and have it send weaker raspi's the information to display
+		- Have a bunch of mediocre raspi's running localhosts
+	
+
+
+- Make html into an app

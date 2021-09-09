@@ -53,7 +53,14 @@
 				<div class="card card-cover h-100 overflow-hidden text-white bg-dark rounded-5 shadow-lg" style="background-image: url({{weather_image}});">
 				<div class="d-flex flex-column h-100 p-5 pb-3 text-white text-shadow-1">
 
-					<h2 class="mt-5 mb-4 display-6 lh-1 fw-bold">{{conditions}} <h4>Currently: {{current}}</h4><h5>{{description}}</h5></h2>  
+					<h2 class="mt-5 mb-5 display-6 lh-1 fw-bold">{{forecast}} 
+						<h4 class='mt-2'>Currently: {{current}}</h4>
+							<h5>
+							{% if description != None %}
+								{{description}}
+							{% endif %}
+							</h5>
+						</h2>  
 					
 					<ul class="d-flex list-unstyled mt-auto">
 					<li class="me-auto">
@@ -75,7 +82,7 @@
 			<div class="col">
 				<div class="card card-cover h-100 overflow-hidden text-white bg-dark rounded-5 shadow-lg">
 				<div class="d-flex flex-column h-100 p-5 pb-3 text-shadow-1">
-					<h2 class="pt-3 mt-5 mb-4 display-6 lh-1 fw-bold"><center id='schoolAdHeader'>Want an ad on the dashboard?</center>
+					<h2 class="mt-5 mb-4 display-6 lh-1 fw-bold"><center id='schoolAdHeader'>Want an ad on the dashboard?</center>
 						<h2 class="pb-1 border-bottom"></h2>
 						<center><h4 id='schoolAdSubHeader'>Reach out to Tujaguem@middletownk12.org for info on how to add an advert</h4></center>
 					</h2>
@@ -111,15 +118,16 @@
 				//Gets am/pm value and switches from military time to standard
 				
 				var ampm;
-				if(dt.getHours() > 12) {
-					var hours = dt.getHours() - 12;
-					ampm = 'PM';
+				if(dt.getHours() == 24) {
+					var hours = 12;
+					console.log('ran')
+					ampm = 'AM';
 				} else if(dt.getHours() == 12) {
 					var hours = dt.getHours();
 					ampm = 'PM';
-				} else if(dt.getHours() == 24) {
-					var hours = 12;
-					ampm = 'AM';
+				} else if(dt.getHours() > 12) {
+					var hours = dt.getHours() - 12;
+					ampm = 'PM';
 				} else {
 					var hours = dt.getHours();
 					ampm = 'AM';

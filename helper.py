@@ -10,9 +10,7 @@ class aware:
 		element = soup.find('span', style='bgcolor: #FF8000;')
 		day = 'A' if 'A-day' in element.text else 'B' if 'B-day' in element.text else 'UNKNOWN'
 		return day
-	"""
 	
-	"""
 	def get_weather():
 		URL = "https://weather.com/weather/today/l/40.39,-74.10?par=google"
 		html = requests.get(URL)
@@ -26,12 +24,12 @@ class aware:
 
 		if len([x for x in split_results[0] if type(x) == int]) == 2:
 			high = '--'
-			low = sorted(split_results[0])[0]
-			current = sorted(split_results[0])[-1]
+			low = str(sorted(split_results[0])[0]) + '°'
+			current = str(sorted(split_results[0])[1]) + '°'
 		elif len([x for x in split_results[0] if type(x) == int]) == 3:	
-			high = sorted(split_results[0], reverse=True)[0]
-			low = sorted(split_results[0])[0]
-			current = sorted(split_results[0])[1]
+			high = str(sorted(split_results[0], reverse=True)[0]) + '°'
+			low = str(sorted(split_results[0])[0]) + '°'
+			current = str(sorted(split_results[0])[1]) + '°'
 
 
 		context = soup.find(attrs={'aria-label' : 'Current Conditions for Middletown Township, NJ Weather'})
@@ -53,7 +51,7 @@ class aware:
 
 		final = {
 			'forecast' : split_results[1][0],
-			'hilo' : f"{high}/{low}",
+			'high_low' : f"{high}/{low}",
 			'current' : current,
 			'description' : description if not unavailable else None
 		}
