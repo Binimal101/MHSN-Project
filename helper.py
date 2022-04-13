@@ -8,7 +8,8 @@ class aware:
 		html = requests.get(URL)
 		soup = BeautifulSoup(html.text, 'lxml')
 		element = soup.find('span', style='bgcolor: #FF8000;')
-		day = 'A' if 'A-day' in element.text else 'B' if 'B-day' in element.text else 'UNKNOWN'
+		#NoneType is recognised as type str in flask render_template(), replace with empty byte-strings
+		day = 'A' if 'A-day' in element.text else 'B' if 'B-day' in element.text else ''
 		return day
 	
 	def get_weather():
@@ -35,19 +36,26 @@ class aware:
 		context = soup.find(attrs={'aria-label' : 'Current Conditions for Middletown Township, NJ Weather'})
 		unavailable = False
 		for iter, content in enumerate(context.div):
-			# print(content.get('class')[0])
+			unavailable = True #if none of these values consist of whats there ie. there is no description, it gets buggy real fast
 			try:
 				if 'CurrentConditions--header' in content.get('class')[0]:
 					continue
 				elif 'CurrentConditions--dataWrapperInner' in content.get('class')[0]:
 					continue
+				elif 'CurrentConditions--tempValue' in content.get('class')[0]:
+					continue
 				elif 'CurrentConditions--' in content.get('class')[0]: #to make sure we have the right divider while navigating which outliers shouldn't be included
+					# print(content.prettify(), '\n', content.get('class')[0])
 					context = content #sets new context to search
+					unavailable = False
 					break
 			except:
 				unavailable = True
+
 		if not unavailable:
 			description = context.span.text
+		else:
+			description = None
 
 		final = {
 			'forecast' : split_results[1][0],

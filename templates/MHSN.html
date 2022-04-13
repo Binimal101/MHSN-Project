@@ -25,7 +25,7 @@
 						Today is 
 						<!--TODO, try to put in seperate script and change inner html of the date tag, use jinja in-line codeblock tags to import today_is variable to concatanate-->
 						<script>now = new Date();var days = new Array('Sunday','Monday','Tuesday','Wednesday', 'Thursday','Friday','Saturday');var months = new Array('January','February','March','April', 'May','June','July','August','September', 'October','November','December');var date = ((now.getDate()<10) ? "0" : "")+ now.getDate();function y2k(number){return (number < 1000) ? number + 1900 : number;}today = days[now.getDay()] + ", " + " " + months[now.getMonth()] + " " + date + ", " + (y2k(now.getYear())) ;document.write("" + today);</script>
-						{% if today_is != 'UNKNOWN' %}
+						{% if today_is != '' %}
 							and an {{today_is}}-Day
 						{% endif %}
 					</h2>
@@ -112,13 +112,13 @@
 		<script>
 			function updootTime() { //Updates static page time by current time
 				var dt = new Date();
-				dt.setMinutes(dt.getMinutes() + 2); //School clock is ~2:15 mins ahead
-				dt.setSeconds(dt.getSeconds() + 15);//School clock is ~2:15 mins ahead
+				//dt.setMinutes(dt.getMinutes() + 2); minute adjustment
+				//dt.setSeconds(dt.getSeconds() + 15); second adjustment
 				
 				//Gets am/pm value and switches from military time to standard
 				
 				var ampm;
-				if(dt.getHours() == 24) {
+				if(dt.getHours() == 00) {
 					var hours = 12;
 					console.log('ran')
 					ampm = 'AM';
@@ -159,8 +159,8 @@
 				// 	return;
 				// } else {
 					dt = new Date();
-					dt.setMinutes(dt.getMinutes() + 2); //School clock is ~2:15 mins ahead
-					dt.setSeconds(dt.getSeconds() + 15);
+					dt.setMinutes(dt.getMinutes() + 2); //School clock is ~2:05 mins ahead
+					dt.setSeconds(dt.getSeconds() + 5);
 					hour = dt.getHours();
 					minute = dt.getMinutes();
 					current = new Date('December 1, 2000 ' + hour + ':' + minute);

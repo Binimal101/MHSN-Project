@@ -1,0 +1,2 @@
+Have a main computer in the library run 24/7 with socket. This will be the server
+
