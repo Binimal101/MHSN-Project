@@ -1,67 +1,58 @@
 from bs4 import BeautifulSoup
-import requests, os
+import requests, os, re, datetime
 
 
 class aware:
 	def get_day_type():
-		URL = 'https://www.middletownk12.org/Domain/23'
-		html = requests.get(URL)
-		soup = BeautifulSoup(html.text, 'lxml')
-		element = soup.find('span', style='bgcolor: #FF8000;')
-		#NoneType is recognised as type str in flask render_template(), replace with empty byte-strings
-		day = 'A' if 'A-day' in element.text else 'B' if 'B-day' in element.text else ''
+		url = "https://www.middletownk12.org/hsnorth"
+		soup = BeautifulSoup(requests.get(url).content, "lxml")
+		
+		today = datetime.date.today()
+		monthDay = "/".join([str(int(x)) for x in today.strftime("%m/%d/%y").split("/")[:-1]])
+		schedule = str(soup.find_all("h2", text = re.compile(monthDay)))
+		
+		ADAY = "A Day" in schedule
+		BDAY = "B Day" in schedule
+		
+		FULLDAY = "Full Day" in schedule
+		
+		day = 'A' if ADAY else 'B' if BDAY else ""
 		return day
 	
 	def get_weather():
-		URL = "https://weather.com/weather/today/l/40.39,-74.10?par=google"
-		html = requests.get(URL)
-		soup = BeautifulSoup(html.text, 'lxml')
-		context = soup.find(attrs={'aria-label' : 'Current Conditions for Middletown Township, NJ Weather'})
-		results = context.find_all(attrs={'data-testid':'TemperatureValue'})
-		results.append(soup.find(attrs={'data-testid':'wxPhrase'}))
+		
+		def isPertinent(x, *args, accuracy = 1):
+			c = 0
+			x = str(x).lower()
+	
+			for check in args:
+				if check in x:
+					c += 1
+			return c >= accuracy
 
-		results = [int(x.text[:-1]) if '°' in x.text else x.text for x in results]
-		split_results = [[x for x in results if type(x) == int], [x for x in results if type(x) == str and not x == '--']]
+		def getNumericalValue(x):
+			x = str(x)
+			res = re.findall(r"(\d*F)", str(x))
+			return res[0]
 
-		if len([x for x in split_results[0] if type(x) == int]) == 2:
-			high = '--'
-			low = str(sorted(split_results[0])[0]) + '°'
-			current = str(sorted(split_results[0])[1]) + '°'
-		elif len([x for x in split_results[0] if type(x) == int]) == 3:	
-			high = str(sorted(split_results[0], reverse=True)[0]) + '°'
-			low = str(sorted(split_results[0])[0]) + '°'
-			current = str(sorted(split_results[0])[1]) + '°'
-
-
-		context = soup.find(attrs={'aria-label' : 'Current Conditions for Middletown Township, NJ Weather'})
-		unavailable = False
-		for iter, content in enumerate(context.div):
-			unavailable = True #if none of these values consist of whats there ie. there is no description, it gets buggy real fast
-			try:
-				if 'CurrentConditions--header' in content.get('class')[0]:
-					continue
-				elif 'CurrentConditions--dataWrapperInner' in content.get('class')[0]:
-					continue
-				elif 'CurrentConditions--tempValue' in content.get('class')[0]:
-					continue
-				elif 'CurrentConditions--' in content.get('class')[0]: #to make sure we have the right divider while navigating which outliers shouldn't be included
-					# print(content.prettify(), '\n', content.get('class')[0])
-					context = content #sets new context to search
-					unavailable = False
-					break
-			except:
-				unavailable = True
-
-		if not unavailable:
-			description = context.span.text
-		else:
-			description = None
-
+		url = "https://www.wunderground.com/hourly/us/nj/middletown/07748"
+		soup = BeautifulSoup(requests.get(url).content, 'lxml')
+		
+		hilo = soup.find_all("p", attrs = {"_ngcontent-sc247" : ""}) #might be buggy, this part 
+		hi, lo = sorted([getNumericalValue(x) for x in hilo if isPertinent(x, "high", "low", "wind", accuracy = 1)])[::-1]
+		
+		url = "https://weather.com/weather/today/l/5d8130b82a144fa9b4c4ca952fbf58a58f1931f3aec139bc0cdc71b113bce84e"
+		soup = BeautifulSoup(requests.get(url).content, "lxml")
+		cur = soup.find("span", re.compile("(CurrentConditions--tempValue--\w*)")).text[:-1] + "F"
+		forecast = soup.find("div", re.compile("CurrentConditions--phraseValue--[\w\d]")).text
+		
+		description = None
+		
 		final = {
-			'forecast' : split_results[1][0],
-			'high_low' : f"{high}/{low}",
-			'current' : current,
-			'description' : description if not unavailable else None
+			'forecast' : forecast, #FIX ONCE AVAILABLE
+			'high_low' : f"{hi}/{lo}",
+			'current'  : cur,
+			'description' : description
 		}
 		return final
 	

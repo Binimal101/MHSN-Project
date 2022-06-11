@@ -3,6 +3,7 @@ from flask import Flask, render_template, url_for
 import requests, json
 #file imports
 from helper import aware
+
 def run_flask_app():
 	app = Flask(__name__)
 
@@ -51,6 +52,7 @@ def run_flask_app():
 			type_ = 'Unknown.jpg'
 		
 		weather_image = url_for('static', filename=f'images/{type_}')
+		
 		#Starts website
 		return render_template('MHSN.html', forecast=forecast, current=current, high_low=high_low, weather_image=weather_image, quote=quote, today_is=today_is, description=description)
 
