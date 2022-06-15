@@ -54,13 +54,12 @@
 				<div class="d-flex flex-column h-100 p-5 pb-3 text-white text-shadow-1">
 
 					<h2 class="mt-5 mb-5 display-6 lh-1 fw-bold">{{forecast}} 
-						<h4 class='mt-2'>Currently: {{current}}</h4>
-							<h5>
-							{% if description != None %}
+							<h5 style="color: red"> {% if description != None %}
 								{{description}}
-							{% endif %}
-							</h5>
-						</h2>  
+							{% endif %} </h5>
+							
+							<h4 class='mt-2'>Currently: {{current}}</h4>
+					</h2>  
 					
 					<ul class="d-flex list-unstyled mt-auto">
 					<li class="me-auto">
@@ -80,24 +79,30 @@
 			</div>
 
 			<div class="col">
-				<div class="card card-cover h-100 overflow-hidden text-white bg-dark rounded-5 shadow-lg">
+<!-- 				bg-dark -->
+				<div id="adBox" class="card card-cover h-100 overflow-hidden text-white bg-dark rounded-5 shadow-lg"> 
 				<div class="d-flex flex-column h-100 p-5 pb-3 text-shadow-1">
-					<h2 class="mt-5 mb-4 display-6 lh-1 fw-bold"><center id='schoolAdHeader'>Want an ad on the dashboard?</center>
-						<h2 class="pb-1 border-bottom"></h2>
-						<center><h4 id='schoolAdSubHeader'>Reach out to Tujaguem@middletownk12.org for info on how to add an advert</h4></center>
+					<h2 class="mt-5 mb-4 display-6 lh-1 fw-bold"><center id='schoolAdHeader'>{{bigText}}</center>
+						
+						<h2 id="adSeparator" class="pb-1 border-bottom"></h2>
+						
+						<center><h4 id='schoolAdSubHeader'>{{middleText}}</h4></center>
 					</h2>
 
 					<ul class="d-flex list-unstyled mt-auto">
+						
 					<li class="me-auto">
 						<img src={{url_for('static', filename='images/mhsn_logo.jpg')}} alt="Bootstrap" width="32" height="32" class="rounded-circle border border-white">
 					</li>
+						
 					<li class="d-flex align-items-center me-3">
 						<svg class="bi me-2" width="1em" height="1em"><use xlink:href="#geo-fill"/></svg>
-						<small id='schoolAdCredits'>Your name, credits</small>
+						<small id='schoolAdCredits'>{{smallTextOne}}</small>
 					</li>
+						
 					<li class="d-flex align-items-center">
 						<svg class="bi me-2" width="1em" height="1em"><use xlink:href="#calendar3"/></svg>
-						<small id='schoolAdOptionalSide'>Optional</small>
+						<small id='schoolAdOptionalSide'>{{smallTextTwo}}</small>
 					</li>
 					</ul>
 				</div>
@@ -112,15 +117,14 @@
 		<script>
 			function updootTime() { //Updates static page time by current time
 				var dt = new Date();
-				//dt.setMinutes(dt.getMinutes() + 2); minute adjustment
-				//dt.setSeconds(dt.getSeconds() + 15); second adjustment
+				dt.setMinutes(dt.getMinutes() + 2); //minute adjustment
+				dt.setSeconds(dt.getSeconds() + 15); //second adjustment
 				
 				//Gets am/pm value and switches from military time to standard
 				
 				var ampm;
 				if(dt.getHours() == 00) {
 					var hours = 12;
-					console.log('ran')
 					ampm = 'AM';
 				} else if(dt.getHours() == 12) {
 					var hours = dt.getHours();
@@ -139,6 +143,7 @@
 				} else {
 					var minutes = dt.getMinutes().toString()
 				}
+				
 				//Fixes second glitch with missing zero
 				if(dt.getSeconds() < 10) {
 					var seconds = '0' + dt.getSeconds().toString()
@@ -159,10 +164,11 @@
 				// 	return;
 				// } else {
 					dt = new Date();
-					dt.setMinutes(dt.getMinutes() + 2); //School clock is ~2:05 mins ahead
-					dt.setSeconds(dt.getSeconds() + 5);
+					dt.setMinutes(dt.getMinutes() + 0); //School clock is ~2:05 mins ahead
+					dt.setSeconds(dt.getSeconds() + 0);
 					hour = dt.getHours();
 					minute = dt.getMinutes();
+				
 					current = new Date('December 1, 2000 ' + hour + ':' + minute);
 					
 					const block_times = {
@@ -219,12 +225,51 @@
 						}
 
 					}
-				//}
 			}
 
+			var possibleAds = ["{{bigText}}".split("{{listSeparator}}"), 
+							   "{{middleText}}".split("{{listSeparator}}"), 
+							   "{{smallTextOne}}".split("{{listSeparator}}"), 
+							   "{{smallTextTwo}}".split("{{listSeparator}}"), 
+							   "{{separator}}".split("{{listSeparator}}"),
+							   "{{background}}".split("{{listSeparator}}"),
+							  ];
+			
+			for(i = 0; i < possibleAds.length; i++) {
+				console.log("Advertisement " + i);
+				for(k = 0; k < possibleAds[i].length; k++) {
+					Array.from(possibleAds[i][k]).splice(0, 1);
+					console.log("\t" + possibleAds[i][k]);
+				}
+			}
+
+			function updootAdsToAd(ad) {
+				document.getElementById("schoolAdHeader").innerHTML = possibleAds[0][ad];
+				document.getElementById("schoolAdSubHeader").innerHTML = possibleAds[1][ad];
+				document.getElementById("schoolAdCredits").innerHTML = possibleAds[2][ad];
+				document.getElementById("schoolAdOptionalSide").innerHTML = possibleAds[3][ad];
+				
+				if(possibleAds[4][ad] == "True") {
+					document.getElementById("adSeparator").style.hidden = false;
+				} else {
+					document.getElementById("adSeparator").style.hidden = true;
+				}
+				
+				if(possibleAds[5][ad] == "None") {
+					document.getElementById("adBox").style.backgroundImage = "";
+				} else {
+					document.getElementById("adBox").style.backgroundImage = `url(${possibleAds[5][ad]})`;
+				} 
+				console.log ("Kate is the best. 10x better than Matt");
+			}
+
+			var ct = 0;
+			var seconds = 10;
 			setInterval(function() { // Updates the time every second and returns hour minute values for block updates
 				updootBlock();
 				updootTime();
+				updootAdsToAd(Math.floor(ct/seconds, 0) % possibleAds[0].length); //slows execution time (/num)
+				ct++;
 			}, 1000); //Every 1000 ms is a second
 
 		</script>

@@ -44,9 +44,9 @@ class aware:
 		url = "https://weather.com/weather/today/l/5d8130b82a144fa9b4c4ca952fbf58a58f1931f3aec139bc0cdc71b113bce84e"
 		soup = BeautifulSoup(requests.get(url).content, "lxml")
 		cur = soup.find("span", re.compile("(CurrentConditions--tempValue--\w*)")).text[:-1] + "F"
-		forecast = soup.find("div", re.compile("CurrentConditions--phraseValue--[\w\d]")).text
+		forecast = soup.find("div", re.compile("CurrentConditions--phraseValue--[\w\d]*")).text
 		
-		description = None
+		description = soup.find("h2", re.compile("AlertHeadline--alertText--[\w\d]*")).text
 		
 		final = {
 			'forecast' : forecast, #FIX ONCE AVAILABLE

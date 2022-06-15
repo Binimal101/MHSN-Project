@@ -6,7 +6,6 @@ A local host display to show important newsflashes and graphics for MHSN
 Requirements: 
 ```
 - python == 3.8
-- requests == 2.25.1
 - lxml == 4.6.3
 - beautifulsoup4 == 4.9.3
 - flask == 2.0.1

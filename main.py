@@ -1,8 +1,9 @@
 #main imports
 from flask import Flask, render_template, url_for
-import requests, json
+import requests, json, os
 #file imports
 from helper import aware
+from pprint import pprint
 
 def run_flask_app():
 	app = Flask(__name__)
@@ -50,11 +51,84 @@ def run_flask_app():
 			type_ = 'Rainy.jpeg'
 		else:
 			type_ = 'Unknown.jpg'
+
+
 		
 		weather_image = url_for('static', filename=f'images/{type_}')
+
+		sep = "␟" #ASCII 31, line separator character "␟"
+		
+		#Needs to come out as [bigTexts: [...], middleTexts: [...] etc]
+		def unpackAdvertContents(original, file = "advertisingDB.txt"): #TODO add file parsing
+			
+			if os.stat(file).st_size == 0:
+				return original
+			else:
+				with open(file, "r") as f: #storing them as[Ad 1: [bgtxt, mdtxt...], Ad 2: [...] etc]
+					lines = "\n".join(f.read().split("\n")[1:]) # each advertisement instance
+					newAds = original
+					
+					if len(lines) > 1 and "\n" in lines: #there are multiple ads to display
+						lines = lines.split("\n")
+						for line in lines:
+							params = line.split(sep) #each element of the advert
+							for iter_, param in enumerate(params): 
+								if sep in param:
+									param.replace(sep, "")
+								
+								if iter_ == 5 and str(param) != "None":
+									param = url_for("static", filename = ("images/advertisingBackgrounds/" + param))
+									
+								newAds[iter_].append(param)
+					else:
+						params = lines.split(sep) #each element of the advert
+						for iter_, param in enumerate(params):
+							if sep in param:
+								param.replace(sep, "")
+								
+							if iter_ == 5 and str(param) != "None":
+								param = url_for("static", filename = ("images/advertisingBackgrounds/" + param))
+								
+							newAds[iter_].append(param)
+			
+			for i in range(len(newAds)):
+				newAds[i] = sep.join(newAds[i])
+
+			return newAds
+				
+		
+		advertisingAdvert = [
+					["Want an ad on the dashboard?"],
+					["Reach out to Tujaguem@middletownk12.org for info on how to add an advert"],
+					["False"],
+					["Your name, credits"],
+					["More room for text"],
+					["None"]
+				]
+
+		#As long as these are packed correctly here, order doesn't matter until we get to the other file.
+		curBigText, curMiddleText, curSeparation, curSmallTextOne, curSmallTextTwo, curBackground = unpackAdvertContents(advertisingAdvert)
 		
 		#Starts website
-		return render_template('MHSN.html', forecast=forecast, current=current, high_low=high_low, weather_image=weather_image, quote=quote, today_is=today_is, description=description)
+		return render_template('MHSN.html', 
+								#weather stuff
+							   	forecast=forecast, current=current, high_low=high_low, 
+							   	weather_image=weather_image, description=description,
+							   
+							  	#quotes n dayType
+							   	quote=quote, today_is=today_is,
+							   
+								#advertisements
+							   	bigText = curBigText, 
+							   	middleText = curMiddleText,
+							   	smallTextOne = curSmallTextOne, smallTextTwo = curSmallTextTwo,
+							   	separator = curSeparation,
+							   	background = curBackground,
+
+							   	len = len, #used for jinja if statements
+							 	listSeparator = sep
+							)
+								
 
 	if __name__ == '__main__':
 		app.run(host="0.0.0.0", port=8081, debug=True)
