@@ -1,0 +1,14 @@
+OTHER:
+
+- Add explicit support for advertisements (this should probably come after the redesign) (IProg)
+	- add javascript that edits the current value for each value in adv, picking the next advertisment after fading in and out every x % 1000
+
+- Fix spacing on elements, both in the panels and how the panels are arranged
+	- Complete makeover due end of Senior year
+
+- Add two ad attribute's, killtimer and timeCreated, in which after (time.time >= timeCreated + killtimer) then the ad gets removed
+	from the db
+
+- To get more accurate time readings, ask up about how the clocks in the school are setup
+	- make model etc
+	- if they are wired together

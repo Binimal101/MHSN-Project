@@ -51,61 +51,70 @@
 			<div class="row row-cols-1 row-cols-lg-2 align-items-stretch g-4 py-5">
 			<div class="col">
 				<div class="card card-cover h-100 overflow-hidden text-white bg-dark rounded-5 shadow-lg" style="background-image: url({{weather_image}});">
-				<div class="d-flex flex-column h-100 p-5 pb-3 text-white text-shadow-1">
-
-					<h2 class="mt-5 mb-5 display-6 lh-1 fw-bold">{{forecast}} 
-							<h5 style="color: red"> {% if description != None %}
-								{{description}}
-							{% endif %} </h5>
+					<!-- Weather Container-->
+					<div class="d-flex flex-column h-100 p-5 pb-3 pt-3 text-white text-shadow-1">
+					<!--mbAuto -->
+						<h2 class="mt-5 display-6 lh-1 fw-bold">{{forecast}} 
+							<h3 class='mt-2'>Currently: {{current}}</h3>
 							
-							<h4 class='mt-2'>Currently: {{current}}</h4>
-					</h2>  
-					
-					<ul class="d-flex list-unstyled mt-auto">
-					<li class="me-auto">
-						<img src={{url_for('static', filename='images/mhsn_logo.jpg')}} alt="Bootstrap" width="32" height="32" class="rounded-circle border border-white" id='mhsn_logo'>
-					</li>
-					<li class="d-flex align-items-center me-3">
-						<svg class="bi me-2" width="1em" height="1em"><use xlink:href="#geo-fill"/></svg>
-						<small>High/Low:</small>
-					</li>
-					<li class="d-flex align-items-center">
-						<svg class="bi me-2" width="1em" height="1em"><use xlink:href="#calendar3"/></svg>
-						<small>{{high_low}}</small>
-					</li>
-					</ul>
-				</div>
+							<h6 class="mb-0" style="color: red"> {% if description != None %}
+								{{description}}
+							{% endif %} </h6>
+
+							{% if precip != "" %}
+								<h6>Chance of Rain: {{precip}}</h6>
+							{% endif %}
+							
+						</h2>  
+						
+						<ul class="d-flex list-unstyled mt-auto">
+							<li class="me-auto">
+								<img src={{url_for('static', filename='images/mhsn_logo.jpg')}} alt="Bootstrap" width="32" height="32" class="rounded-circle border border-white" id='mhsn_logo'>
+							</li>
+							
+							<li class="d-flex align-items-center me-3">
+								<svg class="bi me-2" width="1em" height="1em"><use xlink:href="#geo-fill"/></svg>
+								<small>High/Low:</small>
+							</li>
+							
+							<li class="d-flex align-items-center">
+								<svg class="bi me-2" width="1em" height="1em"><use xlink:href="#calendar3"/></svg>
+								<small>{{high_low}}</small>
+							</li>
+							
+						</ul>
+					</div>
 				</div>
 			</div>
 
 			<div class="col">
-<!-- 				bg-dark -->
 				<div id="adBox" class="card card-cover h-100 overflow-hidden text-white bg-dark rounded-5 shadow-lg"> 
-				<div class="d-flex flex-column h-100 p-5 pb-3 text-shadow-1">
-					<h2 class="mt-5 mb-4 display-6 lh-1 fw-bold"><center id='schoolAdHeader'>{{bigText}}</center>
+					<!-- Ad Container-->
+					<div class="d-flex flex-column h-100 p-5 pb-3 pt-3 text-white text-shadow-1">
 						
-						<h2 id="adSeparator" class="pb-1 border-bottom"></h2>
-						
-						<center><h4 id='schoolAdSubHeader'>{{middleText}}</h4></center>
-					</h2>
-
-					<ul class="d-flex list-unstyled mt-auto">
-						
-					<li class="me-auto">
-						<img src={{url_for('static', filename='images/mhsn_logo.jpg')}} alt="Bootstrap" width="32" height="32" class="rounded-circle border border-white">
-					</li>
-						
-					<li class="d-flex align-items-center me-3">
-						<svg class="bi me-2" width="1em" height="1em"><use xlink:href="#geo-fill"/></svg>
-						<small id='schoolAdCredits'>{{smallTextOne}}</small>
-					</li>
-						
-					<li class="d-flex align-items-center">
-						<svg class="bi me-2" width="1em" height="1em"><use xlink:href="#calendar3"/></svg>
-						<small id='schoolAdOptionalSide'>{{smallTextTwo}}</small>
-					</li>
-					</ul>
-				</div>
+						<h2 class="mb-4 display-6 lh-1 fw-bold">
+							<center id='schoolAdHeader' class="mt-5 mb-auto display-6 lh-1 fw-bold"></center>
+							
+							<center><h4 id='schoolAdSubHeader' class="mt-1"></h4></center>
+						</h2>
+	
+						<ul class="d-flex list-unstyled mt-auto">
+							
+						<li class="me-auto">
+							<img src={{url_for('static', filename='images/mhsn_logo.jpg')}} alt="Bootstrap" width="32" height="32" class="rounded-circle border border-white">
+						</li>
+							
+						<li class="d-flex align-items-center me-3">
+							<svg class="bi me-2" width="1em" height="1em"><use xlink:href="#geo-fill"/></svg>
+							<small id='schoolAdCredits'></small>
+						</li>
+							
+						<li class="d-flex align-items-center">
+							<svg class="bi me-2" width="1em" height="1em"><use xlink:href="#calendar3"/></svg>
+							<small id='schoolAdOptionalSide'></small>
+						</li>
+						</ul>
+					</div>
 				</div>
 			</div>
 			</div>
@@ -231,7 +240,6 @@
 							   "{{middleText}}".split("{{listSeparator}}"), 
 							   "{{smallTextOne}}".split("{{listSeparator}}"), 
 							   "{{smallTextTwo}}".split("{{listSeparator}}"), 
-							   "{{separator}}".split("{{listSeparator}}"),
 							   "{{background}}".split("{{listSeparator}}"),
 							  ];
 			
@@ -249,27 +257,25 @@
 				document.getElementById("schoolAdCredits").innerHTML = possibleAds[2][ad];
 				document.getElementById("schoolAdOptionalSide").innerHTML = possibleAds[3][ad];
 				
-				if(possibleAds[4][ad] == "True") {
-					document.getElementById("adSeparator").style.hidden = false;
-				} else {
-					document.getElementById("adSeparator").style.hidden = true;
-				}
-				
-				if(possibleAds[5][ad] == "None") {
+				if(possibleAds[4][ad] == "None") {
 					document.getElementById("adBox").style.backgroundImage = "";
 				} else {
-					document.getElementById("adBox").style.backgroundImage = `url(${possibleAds[5][ad]})`;
+					document.getElementById("adBox").style.backgroundImage = `url(${possibleAds[4][ad]})`;
 				} 
-				console.log ("Kate is the best. 10x better than Matt");
 			}
 
-			var ct = 0;
-			var seconds = 10;
+			updootAdsToAd(0) //Initial
+			
+			var secondDelay = 10;
+			var ct = 1; //after initial
+			setInterval(function() {
+				updootAdsToAd(ct % possibleAds[0].length);
+				ct++;
+			}, 1000 * secondDelay);
+
 			setInterval(function() { // Updates the time every second and returns hour minute values for block updates
 				updootBlock();
-				updootTime();
-				updootAdsToAd(Math.floor(ct/seconds, 0) % possibleAds[0].length); //slows execution time (/num)
-				ct++;
+				updootTime();				
 			}, 1000); //Every 1000 ms is a second
 
 		</script>

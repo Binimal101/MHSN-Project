@@ -1,7 +1,0 @@
-Cards not displaying images
-
-Not able to remove horizontal line with id="adSeparator", able to to with jinja if, but no way so far to get rid of and reimpliment when needed
-
-Glitches (Non Urgent):
-  - Current glitch in which when resized, extra horizontal space is only allotted to the bottom of top card
-  - Current glitch in which when switching texts, the horizontal and vertical alloted space of the cards increase/decrease

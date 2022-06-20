@@ -46,14 +46,31 @@ class aware:
 		cur = soup.find("span", re.compile("(CurrentConditions--tempValue--\w*)")).text[:-1] + "F"
 		forecast = soup.find("div", re.compile("CurrentConditions--phraseValue--[\w\d]*")).text
 		
-		description = soup.find("h2", re.compile("AlertHeadline--alertText--[\w\d]*")).text
+		description = soup.find("h2", re.compile("AlertHeadline--alertText--[\w\d]*"))
+
+		if description is not None:
+			description = description.text
+
+		#Precipitation values
+		options = soup.find_all("a", re.compile("Column--innerWrapper--[\w\d]* Button--default--[\w\d]*"), href="/weather/tenday/l/5d8130b82a144fa9b4c4ca952fbf58a58f1931f3aec139bc0cdc71b113bce84e")
+		
+		today = [x for x in options if "Today" in x.get_text()][0]
+		precip = today.find("span", re.compile("Column--precip--[\w\d]*"))
+		
+		stringParse = precip.get_text()
+		precipChance = "".join([x for x in stringParse if x.isdigit() or x == "%"])
+		
+		if precipChance == '0%':
+			precipChance = ""
 		
 		final = {
 			'forecast' : forecast, #FIX ONCE AVAILABLE
 			'high_low' : f"{hi}/{lo}",
 			'current'  : cur,
-			'description' : description
+			'description' : description,
+			'precipitationPercent' : precipChance
 		}
+		
 		return final
 	
 	def from_military_to_standard(hour, minute=None, str=None):
