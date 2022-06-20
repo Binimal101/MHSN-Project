@@ -1,0 +1,7 @@
+Due senior year, make full fledged website, administrator login for adding advertisments, normal login maybe for setting up personal
+block schedules.
+
+Have a main computer in the library run 24/7 with socket. This will be the server
+Have raspi's over the school connected via socket. These are the clients, they will recieve only the completed CSS and HTML files
+
+Fullscreen localhost: "google chrome path" -kiosk -fullscreen "your URL"

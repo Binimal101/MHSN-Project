@@ -1,0 +1,7 @@
+Time is cracked
+
+Glitch in which AB day schedule is not working
+
+Glitches (Non Urgent):
+  - Current glitch in which when resized, extra horizontal space is only allotted to the bottom of top card
+  - Current glitch in which when switching texts, the horizontal and vertical alloted space of the cards increase/decrease

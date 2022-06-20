@@ -19,6 +19,7 @@ def run_flask_app():
 	current = weather_dict['current']
 	forecast = weather_dict['forecast']
 	high_low = weather_dict['high_low']
+	precip = weather_dict['precipitationPercent']
 
 	@app.route('/')
 	def home():
@@ -30,9 +31,11 @@ def run_flask_app():
 			description = weather_dict['description']
 		else:
 			description = None
+			
 		current = weather_dict['current']
 		forecast = weather_dict['forecast']
 		high_low = weather_dict['high_low']
+		precip = weather_dict['precipitationPercent']
 
 		#For quote generation
 		JSON = requests.get('https://zenquotes.io/api/random').text
@@ -45,18 +48,17 @@ def run_flask_app():
 			type_ = 'Sunny.jpeg'
 		elif 'snow' in forecast.lower():
 			type_ = 'Snowy.jpeg'
-		elif 'thunder' in forecast.lower() or 'lightning' in forecast.lower():
-			type_ = 'Thunder.jpeg'
 		elif 'rain' in forecast.lower() or 'shower' in forecast.lower() or 'drizzle' in forecast.lower():
 			type_ = 'Rainy.jpeg'
+		elif 'thunder' in forecast.lower() or 'lightning' in forecast.lower() or 'storm' in forecast.lower():
+			type_ = 'Thunder.jpeg'
 		else:
 			type_ = 'Unknown.jpg'
-
-
+		
 		
 		weather_image = url_for('static', filename=f'images/{type_}')
 
-		sep = "␟" #ASCII 31, line separator character "␟"
+		sep = "␟" #Delimeter I'm using is ASCII 31, line separator character "␟"
 		
 		#Needs to come out as [bigTexts: [...], middleTexts: [...] etc]
 		def unpackAdvertContents(original, file = "advertisingDB.txt"): #TODO add file parsing
@@ -75,8 +77,9 @@ def run_flask_app():
 							for iter_, param in enumerate(params): 
 								if sep in param:
 									param.replace(sep, "")
-								
-								if iter_ == 5 and str(param) != "None":
+
+								#checks for file extensions, if there are, redirect it to the folder it resides in
+								if len([param.endswith("." + x) for x in ["jpg", "jpeg", "png", "gif", "ai", "pdf", "eps"] if param.endswith("." + x)]) >= 1:
 									param = url_for("static", filename = ("images/advertisingBackgrounds/" + param))
 									
 								newAds[iter_].append(param)
@@ -85,8 +88,9 @@ def run_flask_app():
 						for iter_, param in enumerate(params):
 							if sep in param:
 								param.replace(sep, "")
-								
-							if iter_ == 5 and str(param) != "None":
+
+							#checks for file extensions, if there are, redirect it to the folder it resides in
+							if len([param.endswith("." + x) for x in ["jpg", "jpeg", "png", "gif", "ai", "pdf", "eps"] if param.endswith("." + x)]) >= 1:
 								param = url_for("static", filename = ("images/advertisingBackgrounds/" + param))
 								
 							newAds[iter_].append(param)
@@ -100,20 +104,21 @@ def run_flask_app():
 		advertisingAdvert = [
 					["Want an ad on the dashboard?"],
 					["Reach out to Tujaguem@middletownk12.org for info on how to add an advert"],
-					["False"],
 					["Your name, credits"],
 					["More room for text"],
 					["None"]
 				]
 
 		#As long as these are packed correctly here, order doesn't matter until we get to the other file.
-		curBigText, curMiddleText, curSeparation, curSmallTextOne, curSmallTextTwo, curBackground = unpackAdvertContents(advertisingAdvert)
+		curBigText, curMiddleText, curSmallTextOne, curSmallTextTwo, curBackground = unpackAdvertContents(advertisingAdvert)
 		
 		#Starts website
+		current = current.replace("F", "°")
+		high_low = high_low.replace("F", "°")
 		return render_template('MHSN.html', 
 								#weather stuff
 							   	forecast=forecast, current=current, high_low=high_low, 
-							   	weather_image=weather_image, description=description,
+							   	weather_image=weather_image, description=description, precip = precip,
 							   
 							  	#quotes n dayType
 							   	quote=quote, today_is=today_is,
@@ -122,7 +127,6 @@ def run_flask_app():
 							   	bigText = curBigText, 
 							   	middleText = curMiddleText,
 							   	smallTextOne = curSmallTextOne, smallTextTwo = curSmallTextTwo,
-							   	separator = curSeparation,
 							   	background = curBackground,
 
 							   	len = len, #used for jinja if statements
