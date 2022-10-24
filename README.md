@@ -11,6 +11,4 @@ Requirements:
 - flask == 2.0.1
 ```
 
-The way this works is by running the program on an operating system with a python interpreter and the required dependencies, 
-the program will run a localhost with these elements. 
-The way to export to a display is simply to run fullscreen on the localhost with the program running in the background.
+Works by running local host using required documents with flask. Display can be outputted automatically on a microcomputer with chrome or chromium fullscreen commands through terminal.
