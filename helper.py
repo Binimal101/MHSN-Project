@@ -1,7 +1,6 @@
 from bs4 import BeautifulSoup
 import requests, os, re, datetime
 
-
 class aware:
 	def get_day_type():
 		url = "https://www.middletownk12.org/hsnorth"
