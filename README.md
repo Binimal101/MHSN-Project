@@ -13,4 +13,4 @@ Requirements:
 
 Works by running local host using required documents with flask. Display can be outputted automatically on a microcomputer with chrome or chromium fullscreen commands through terminal.
 
-Repl.it: https://replit.com/@Binimal/MHSN-Project#main.py
+Repl.it: https://replit.com/@Binimal/MHSN-Project?v=1
